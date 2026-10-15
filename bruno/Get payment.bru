@@ -1,0 +1,21 @@
+meta {
+  name: Get payment
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/payments/{{paymentId}}
+  body: none
+  auth: none
+}
+
+headers {
+  X-API-Key: {{apiKey}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:18080
+  paymentId: 6d42a919-a725-4b14-b116-88afaae3f05f
+  apiKey: dev-api-key
+}

@@ -1,0 +1,42 @@
+meta {
+  name: Create payment
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/payments
+  body: json
+  auth: none
+}
+
+headers {
+  X-API-Key: {{apiKey}}
+  Idempotency-Key: {{idempotencyKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "amount": "10.50",
+    "currency": "RUB",
+    "description": "Тестовый платёж",
+    "metadata": {
+      "order_id": "1001"
+    },
+    "webhook_url": "http://host.docker.internal:18081/"
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:18080
+  apiKey: dev-api-key
+  idempotencyKey: demo-1
+}
+
+script:post-response {
+  const data = res.getBody();
+  if (data && data.payment_id) {
+    bru.setEnvVar("paymentId", data.payment_id);
+  }
+}
